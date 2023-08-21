@@ -65,7 +65,20 @@ export type Fixture = {
   group?: PoolName;
 };
 
-export const fixtures: Fixture[] = [
+export type fixturesByMatch = Record<MatchNumber, Fixture>;
+
+export function groupByMatchNumber(
+  fixtures: readonly Fixture[]
+): Partial<fixturesByMatch> {
+  return fixtures.reduce((acc, fixture) => {
+    return {
+      ...acc,
+      [fixture.matchNumber]: fixture,
+    };
+  }, {});
+}
+
+export const fixtures: readonly Fixture[] = [
   {
     matchNumber: 1,
     roundNumber: 1,
@@ -490,4 +503,4 @@ export const fixtures: Fixture[] = [
     homeTeam: { matchNumber: 45, team: "winner" },
     awayTeam: { matchNumber: 46, team: "winner" },
   },
-];
+] as const;

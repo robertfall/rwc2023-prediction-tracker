@@ -2,7 +2,6 @@ import { Fixture, FixtureTeam } from "../data/fixtures";
 import { PointsPrediction } from "./PointsPrediction";
 import "./FixtureSummary.css";
 import { CountryName, getCountryByName } from "../data/countries";
-
 function teamLabel(fixtureTeam: FixtureTeam): string {
   if (typeof fixtureTeam === "string") {
     return fixtureTeam;
@@ -13,13 +12,18 @@ function teamLabel(fixtureTeam: FixtureTeam): string {
   }
 }
 
+const dateFormatter = new Intl.DateTimeFormat(
+  Intl.DateTimeFormat().resolvedOptions().locale,
+  {
+    dateStyle: "full",
+    timeStyle: "short",
+    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  }
+);
+
 export type FixtureProps = Fixture;
 export function FixtureSummary(fixture: FixtureProps) {
-  const { homeTeam, awayTeam, location, dateUtc } = fixture;
-
-  const dateLocal = new Date(dateUtc).toLocaleString(undefined, {
-    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-  });
+  const { homeTeam, awayTeam, location, dateUtc, matchNumber } = fixture;
 
   const homeCountry = getCountryByName(homeTeam as CountryName)!;
   const awayCountry = getCountryByName(awayTeam as CountryName)!;
@@ -28,7 +32,7 @@ export function FixtureSummary(fixture: FixtureProps) {
     <div className="fixture-summary">
       <div className="details">
         <div>{location}</div>
-        <div>{dateLocal}</div>
+        <div>{dateFormatter.format(new Date(dateUtc))}</div>
       </div>
       <div className="title">
         <div className="home-team">
@@ -47,7 +51,7 @@ export function FixtureSummary(fixture: FixtureProps) {
           />
         </div>
       </div>
-      <PointsPrediction />
+      <PointsPrediction matchNumber={matchNumber} />
     </div>
   );
 }

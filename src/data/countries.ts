@@ -1,8 +1,8 @@
 export function getCountryByName(name: CountryName) {
   return countries.find((country) => country.name === name);
-};
+}
 
-export type CountryName = typeof countries[number]["name"];
+export type CountryName = (typeof countries)[number]["name"];
 
 const countries = [
   {
@@ -43,6 +43,10 @@ const countries = [
     "region-code": "019",
     "sub-region-code": "419",
     "intermediate-region-code": "005",
+  },
+  {
+    name: "England",
+    "alpha-2": "gb-eng",
   },
   {
     name: "Fiji",
@@ -188,6 +192,10 @@ const countries = [
     "intermediate-region-code": "",
   },
   {
+    name: "Scotland",
+    "alpha-2": "gb-sct",
+  },
+  {
     name: "South Africa",
     "alpha-2": "ZA",
     "alpha-3": "ZAF",
@@ -225,6 +233,10 @@ const countries = [
     "region-code": "019",
     "sub-region-code": "419",
     "intermediate-region-code": "005",
+  },
+  {
+    name: "Wales",
+    "alpha-2": "gb-wls",
   },
 ] as const;
 

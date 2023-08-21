@@ -1,15 +1,12 @@
 import "./App.css";
 import { GroupStageFixtures } from "./components/GroupStageFixtures";
-import { fixtures } from "./data/fixtures";
-import { ResultsRepository } from "./services/results-repository";
+import { NavBar } from "./components/NavBar";
 
-function App({ resultsRepository }: { resultsRepository: ResultsRepository }) {
+function App() {
   return (
     <>
-      <GroupStageFixtures
-        resultsRepository={resultsRepository}
-        fixtures={fixtures.slice(0, 3)}
-      />
+      <NavBar />
+      <GroupStageFixtures />
     </>
   );
 }

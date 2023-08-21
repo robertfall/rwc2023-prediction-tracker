@@ -2,14 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import { indexedDBRepositoryFactory } from "./services/indexdb-results-repository";
+import { AppContext, initializeAppContext } from "./services/app-context.ts";
 
 async function createApp() {
-  const resultsRepository = await indexedDBRepositoryFactory();
+  const context = await initializeAppContext();
 
   ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
-      <App resultsRepository={resultsRepository} />
+      <AppContext.Provider value={context}>
+        <App />
+      </AppContext.Provider>
     </React.StrictMode>
   );
 }

@@ -11,5 +11,5 @@ export type Result = {
 export type ResultsRepository = {
   getAllResults: () => Promise<Result[]>;
   getResultForMatch: (matchNumber: MatchNumber) => Promise<Result | undefined>;
-  upsertResult: (result: Result) => Promise<void>;
+  upsertResult: (result: Partial<Result>) => Promise<void>;
 };

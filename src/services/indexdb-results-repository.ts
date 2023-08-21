@@ -44,7 +44,9 @@ export async function indexedDBRepositoryFactory(): Promise<ResultsRepository> {
     });
   }
 
-  async function getResultForMatch(matchNumber: MatchNumber): Promise<Result | undefined> {
+  async function getResultForMatch(
+    matchNumber: MatchNumber
+  ): Promise<Result | undefined> {
     return new Promise((resolve, reject) => {
       const request = db
         .transaction(PREDICTIONS_KEY)
@@ -61,11 +63,21 @@ export async function indexedDBRepositoryFactory(): Promise<ResultsRepository> {
     });
   }
 
-  async function upsertResult(result: Result) {
-    db
-      .transaction(PREDICTIONS_KEY)
-      .objectStore(PREDICTIONS_KEY)
-      .add(result);
+  async function upsertResult(result: Partial<Result>): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const request = db
+        .transaction(PREDICTIONS_KEY, "readwrite")
+        .objectStore(PREDICTIONS_KEY)
+        .put(result);
+
+      request.onsuccess = () => {
+        resolve();
+      };
+
+      request.onerror = (error) => {
+        reject(error);
+      };
+    });
   }
 
   return {

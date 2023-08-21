@@ -4,13 +4,16 @@ body {
   --white: #fff;
   --subtle: #999;
 
-  background-color: var(--primary);
+  margin: 0;
+
   color: var(--dark-background);
 
-  font-family: WebbEllisCup,Arial,Helvetica Neue,Helvetica,sans-serif
+  font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif;
+  padding-top: 64px;
 }
 
-ul, li {
+ul,
+li {
   margin: none;
   list-style: none;
 }
