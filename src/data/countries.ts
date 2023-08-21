@@ -1,4 +1,10 @@
-export default [
+export function getCountryByName(name: CountryName) {
+  return countries.find((country) => country.name === name);
+};
+
+export type CountryName = typeof countries[number]["name"];
+
+const countries = [
   {
     name: "Argentina",
     "alpha-2": "AR",
@@ -220,4 +226,6 @@ export default [
     "sub-region-code": "419",
     "intermediate-region-code": "005",
   },
-];
+] as const;
+
+export default countries;
