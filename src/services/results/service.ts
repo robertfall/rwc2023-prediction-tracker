@@ -3,27 +3,27 @@ import { produce } from "immer";
 import { MatchNumber } from "../../data/fixtures";
 import { Result, ResultsRepository } from "../results-repository";
 
-export type PredictionsStore = {
-  predictions: Partial<Record<MatchNumber, Result>>;
+export type ResultsStore = {
+  results: Partial<Record<MatchNumber, Result>>;
   upsertResult: (result: Partial<Result>) => void;
   initialize: () => Promise<void>;
 };
 
-export type PredictionsService = UseBoundStore<StoreApi<PredictionsStore>>;
+export type ResultsService = UseBoundStore<StoreApi<ResultsStore>>;
 
-export function getPredictionForMatch(matchNumber: MatchNumber) {
-  return (store: PredictionsStore) => store.predictions[matchNumber];
+export function getResultForMatch(matchNumber: MatchNumber) {
+  return (store: ResultsStore) => store.results[matchNumber];
 }
 
-export function createPredictionsService(resultsRepository: ResultsRepository) {
-  const store = create<PredictionsStore>()((set) => ({
-    predictions: {},
+export function createResultsService(resultsRepository: ResultsRepository) {
+  const store = create<ResultsStore>()((set) => ({
+    results: {},
     initialize: async () => {
       const initialResults = await resultsRepository.getAllResults();
       set((state) =>
         produce(state, (draft) => {
           for (let result of initialResults) {
-            draft.predictions[result.matchNumber] = result;
+            draft.results[result.matchNumber] = result;
           }
         })
       );
@@ -36,7 +36,7 @@ export function createPredictionsService(resultsRepository: ResultsRepository) {
       set((state) =>
         produce(state, (draft) => {
           const matchNumber = result.matchNumber!;
-          draft.predictions[matchNumber] = result as Result;
+          draft.results[matchNumber] = result as Result;
         })
       );
     },

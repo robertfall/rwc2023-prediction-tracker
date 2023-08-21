@@ -1,32 +1,32 @@
 import { ChangeEvent, useCallback } from "react";
 import { MatchNumber } from "../data/fixtures";
-import { usePrediction } from "../services/predictions/hooks";
-import "./PointsPrediction.css";
-export function PointsPrediction({
+import { useResult } from "../services/results/hooks";
+import "./PointsResult.css";
+export function PointsResult({
   matchNumber,
 }: {
   matchNumber: MatchNumber;
 }) {
-  const { prediction, updatePrediction } = usePrediction(matchNumber);
+  const { result, updateResult } = useResult(matchNumber);
 
   const onChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const { name, value } = event.target;
 
-      if (!prediction.matchNumber) return;
+      if (!result.matchNumber) return;
 
-      updatePrediction({
-        ...prediction,
+      updateResult({
+        ...result,
         [name]: value,
       });
     },
-    [updatePrediction]
+    [updateResult]
   );
 
-  const { homeScore, homeTries, awayScore, awayTries } = prediction;
+  const { homeScore, homeTries, awayScore, awayTries } = result;
 
   return (
-    <div className="points-prediction">
+    <div className="points-result">
       <div>
         <label htmlFor="homeScore">Points</label>
         <input

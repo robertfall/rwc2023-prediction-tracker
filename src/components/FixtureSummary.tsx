@@ -1,5 +1,5 @@
 import { Fixture, FixtureTeam } from "../data/fixtures";
-import { PointsPrediction } from "./PointsPrediction";
+import { PointsResult } from "./PointsResult";
 import "./FixtureSummary.css";
 import { CountryName, getCountryByName } from "../data/countries";
 function teamLabel(fixtureTeam: FixtureTeam): string {
@@ -51,7 +51,7 @@ export function FixtureSummary(fixture: FixtureProps) {
           />
         </div>
       </div>
-      <PointsPrediction matchNumber={matchNumber} />
+      <PointsResult matchNumber={matchNumber} />
     </div>
   );
 }

@@ -1,17 +1,17 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { createPredictionsService } from "./service";
+import { createResultsService } from "./service";
 import { memoryResultsRepositoryFactory } from "../memory-results-repository";
 
-describe("predictionsService", () => {
-  let service: ReturnType<typeof createPredictionsService>;
+describe("resultsService", () => {
+  let service: ReturnType<typeof createResultsService>;
 
   beforeEach(async () => {
-    service = createPredictionsService(memoryResultsRepositoryFactory());
+    service = createResultsService(memoryResultsRepositoryFactory());
   });
 
   describe("when empty", () => {
     it("returns all fixtures without results", () => {
-      expect(service.getState().predictions).toEqual({});
+      expect(service.getState().results).toEqual({});
     });
   });
 
@@ -27,7 +27,7 @@ describe("predictionsService", () => {
         } as const;
 
         service.getState().upsertResult(result);
-        expect(service.getState().predictions[1]).toEqual(result);
+        expect(service.getState().results[1]).toEqual(result);
       });
     });
 
@@ -43,7 +43,7 @@ describe("predictionsService", () => {
         service.getState().upsertResult(result);
         service.getState().upsertResult({ ...result, homeScore: 14 });
 
-        expect(service.getState().predictions[1]).toEqual({
+        expect(service.getState().results[1]).toEqual({
           ...result,
           homeScore: 14,
         });

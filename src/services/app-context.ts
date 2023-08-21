@@ -1,28 +1,28 @@
 import { createContext, useContext } from "react";
 import { ResultsRepository } from "./results-repository";
 import {
-  PredictionsService,
-  createPredictionsService,
-} from "./predictions/service";
+  ResultsService,
+  createResultsService,
+} from "./results/service";
 import { indexedDBRepositoryFactory } from "./indexdb-results-repository";
 
 export type AppContext = {
   resultsRepository: ResultsRepository;
-  predictionsService: PredictionsService;
+  resultsService: ResultsService;
 };
 export const AppContext = createContext<AppContext>({} as AppContext);
 
-export const usePredictionsService = () =>
-  useContext(AppContext).predictionsService;
+export const useResultsService = () =>
+  useContext(AppContext).resultsService;
 
 export async function initializeAppContext() {
   const resultsRepository = await indexedDBRepositoryFactory();
-  const predictionsService = createPredictionsService(resultsRepository);
+  const resultsService = createResultsService(resultsRepository);
 
-  predictionsService.getState().initialize();
+  resultsService.getState().initialize();
 
   return {
     resultsRepository,
-    predictionsService,
+    resultsService,
   };
 }

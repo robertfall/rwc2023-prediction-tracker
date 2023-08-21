@@ -1,4 +1,4 @@
-.points-prediction {
+.points-result {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -6,13 +6,13 @@
   border-top: 2px solid var(--dark-background);
 }
 
-.points-prediction > div {
+.points-result > div {
   display: flex;
   flex-direction: column;
   padding: 16px 0;
   width: calc(50% - 16px);
 }
 
-.points-prediction > :last-child {
+.points-result > :last-child {
   text-align: right;
 }
