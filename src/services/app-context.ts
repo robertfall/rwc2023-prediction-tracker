@@ -1,28 +1,19 @@
 import { createContext, useContext } from "react";
-import { ResultsRepository } from "./results-repository";
-import {
-  ResultsService,
-  createResultsService,
-} from "./results/service";
-import { indexedDBRepositoryFactory } from "./indexdb-results-repository";
+import { FixturesService, createFixturesService } from "./fixtures/service";
+import { ResultsService, createResultsService } from "./results/service";
+import { fixtures } from "../data/fixtures";
 
-export type AppContext = {
-  resultsRepository: ResultsRepository;
-  resultsService: ResultsService;
-};
+export type AppContext = { fixturesService: FixturesService, resultsService: ResultsService };
 export const AppContext = createContext<AppContext>({} as AppContext);
 
-export const useResultsService = () =>
-  useContext(AppContext).resultsService;
+export const useFixturesService = () => useContext(AppContext).fixturesService;
 
-export async function initializeAppContext() {
-  const resultsRepository = await indexedDBRepositoryFactory();
-  const resultsService = createResultsService(resultsRepository);
-
-  resultsService.getState().initialize();
+export async function initializeAppContext(): Promise<AppContext> {
+  const fixturesService = createFixturesService(fixtures);
+  const resultsService = createResultsService();
 
   return {
-    resultsRepository,
+    fixturesService,
     resultsService,
   };
 }

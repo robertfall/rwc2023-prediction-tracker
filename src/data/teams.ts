@@ -1,6 +1,6 @@
 import countryData from "./countries";
 
-export type PoolName = "A" | "B" | "C" | "D";
+export type GroupName = keyof typeof groups;
 export const poolA = [
   "New Zealand",
   "France",
@@ -30,9 +30,18 @@ export const poolD = [
   "Chile",
 ] as const;
 
+export const groups = {
+  A: poolA,
+  B: poolB,
+  C: poolC,
+  D: poolD,
+} as const;
+
 export const teams = [...poolA, ...poolB, ...poolC, ...poolD] as const;
 export type TeamName = (typeof teams)[number];
 export type TeamData = (typeof countryData)[number];
 export const teamData = teams.map((team) =>
   countryData.find((country) => country.name === team)
 );
+
+export type MatchTeams = { homeTeam: TeamName; awayTeam: TeamName };

@@ -1,12 +1,20 @@
-import { MatchNumber } from "../data/fixtures";
+import { MatchNumber } from "../../data/fixtures";
 
-export type Result = {
-  matchNumber: MatchNumber;
+export type ResultData = PristineResultData | TouchedResultData;
+export type PristineResultData = {
+  touched: false;
+}
+export type TouchedResultData = {
+  touched: true;
   homeScore: number;
   awayScore: number;
   homeTries: number;
   awayTries: number;
-};
+}
+
+export type Result = {
+  matchNumber: MatchNumber;
+} & ResultData;
 
 export type ResultsRepository = {
   getAllResults: () => Promise<Result[]>;

@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback } from "react";
 import { MatchNumber } from "../data/fixtures";
-import { useResult } from "../services/results/hooks";
+import { useResult } from "../services/logs/hooks";
 import "./PointsResult.css";
 export function PointsResult({
   matchNumber,
@@ -33,7 +33,7 @@ export function PointsResult({
           type="text"
           name="homeScore"
           placeholder="eg. 32"
-          value={homeScore || ""}
+          value={homeScore}
           onChange={onChange}
         />
         <label htmlFor="homeTries">Tries</label>
@@ -41,7 +41,7 @@ export function PointsResult({
           type="text"
           name="homeTries"
           placeholder="eg. 4"
-          value={homeTries || ""}
+          value={homeTries}
           onChange={onChange}
         />
       </div>
@@ -51,7 +51,7 @@ export function PointsResult({
           type="text"
           name="awayScore"
           placeholder="eg. 32"
-          value={awayScore || ""}
+          value={awayScore}
           onChange={onChange}
         />
         <label htmlFor="awayTries">Tries</label>
@@ -59,7 +59,7 @@ export function PointsResult({
           type="text"
           name="awayTries"
           placeholder="eg. 4"
-          value={awayTries || ""}
+          value={awayTries}
           onChange={onChange}
         />
       </div>

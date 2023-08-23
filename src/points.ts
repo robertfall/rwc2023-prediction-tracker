@@ -1,4 +1,4 @@
-import { Result } from "./services/results-repository";
+import { Result } from "./repositories/results/results-repository";
 
 export function getPoints(result: Result) {
   const { homeScore, homeTries, awayScore, awayTries } = result;

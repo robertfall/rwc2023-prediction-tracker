@@ -1,7 +1,8 @@
 import { Fixture, FixtureTeam } from "../data/fixtures";
+import { CountryName, getCountryByName } from "../data/countries";
 import { PointsResult } from "./PointsResult";
 import "./FixtureSummary.css";
-import { CountryName, getCountryByName } from "../data/countries";
+
 function teamLabel(fixtureTeam: FixtureTeam): string {
   if (typeof fixtureTeam === "string") {
     return fixtureTeam;
@@ -21,8 +22,7 @@ const dateFormatter = new Intl.DateTimeFormat(
   }
 );
 
-export type FixtureProps = Fixture;
-export function FixtureSummary(fixture: FixtureProps) {
+export function FixtureSummary(fixture: Fixture) {
   const { homeTeam, awayTeam, location, dateUtc, matchNumber } = fixture;
 
   const homeCountry = getCountryByName(homeTeam as CountryName)!;

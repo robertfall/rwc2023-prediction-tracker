@@ -1,7 +1,6 @@
-import { TeamName, PoolName } from "./teams";
+import { TeamName, GroupName } from "./teams";
 
 export type MatchNumber =
-  | 0
   | 1
   | 2
   | 3
@@ -50,7 +49,7 @@ export type MatchNumber =
   | 46
   | 47
   | 48;
-export type PoolTeam = { pool: PoolName; position: number };
+export type PoolTeam = { pool: GroupName; position: number };
 export type MatchOutcome = "winner" | "loser";
 export type MatchTeam = { matchNumber: number; team: MatchOutcome };
 export type FixtureTeam = TeamName | PoolTeam | MatchTeam;
@@ -62,7 +61,7 @@ export type Fixture = {
   location: string;
   homeTeam: FixtureTeam;
   awayTeam: FixtureTeam;
-  group?: PoolName;
+  group?: GroupName;
 };
 
 export type fixturesByMatch = Record<MatchNumber, Fixture>;

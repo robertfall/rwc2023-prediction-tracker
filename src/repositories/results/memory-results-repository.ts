@@ -1,4 +1,4 @@
-import { MatchNumber } from "../data/fixtures";
+import { MatchNumber } from "../../data/fixtures";
 import { Result, ResultsRepository } from "./results-repository";
 
 export function memoryResultsRepositoryFactory(): ResultsRepository {
@@ -12,8 +12,8 @@ export function memoryResultsRepositoryFactory(): ResultsRepository {
     return results[matchNumber];
   }
 
-  async function upsertResult(result: Result) {
-    results[result.matchNumber] = result;
+  async function upsertResult(result: Partial<Result>) {
+    results[result.matchNumber!] = result as Result;
   }
 
   return {

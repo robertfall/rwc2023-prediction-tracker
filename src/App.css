@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   --primary: #2d3cff;
   --dark-background: #19194b;

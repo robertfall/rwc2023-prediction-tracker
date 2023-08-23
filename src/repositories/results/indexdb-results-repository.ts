@@ -1,32 +1,11 @@
-import { MatchNumber } from "../data/fixtures";
+import { MatchNumber } from "../../data/fixtures";
 import { Result, ResultsRepository } from "./results-repository";
 
-const VERSION = 1;
-const DB_KEY = "Rugby World Cup 2023 - Predictions";
-const PREDICTIONS_KEY = "predictions";
-function initializeDb(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
-    const request = window.indexedDB.open(DB_KEY, VERSION);
 
-    request.onupgradeneeded = () => {
-      const db = request.result;
+export const PREDICTIONS_KEY = "predictions";
 
-      db.createObjectStore(PREDICTIONS_KEY, { keyPath: "matchNumber" });
-    };
 
-    request.onerror = (error) => {
-      reject(error);
-    };
-
-    request.onsuccess = () => {
-      resolve(request.result);
-    };
-  });
-}
-
-export async function indexedDBRepositoryFactory(): Promise<ResultsRepository> {
-  const db = await initializeDb();
-
+export async function indexedDBRepositoryFactory(db: IDBDatabase): Promise<ResultsRepository> {
   async function getAllResults(): Promise<Result[]> {
     return new Promise((resolve, reject) => {
       const request = db
