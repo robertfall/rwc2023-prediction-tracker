@@ -1,9 +1,8 @@
 import { PersistStorage, StorageValue } from "zustand/middleware";
 import { MatchNumber, fixtures } from "../../data/fixtures";
-import { decode, encode } from "../../repositories/results/compression";
-import { Result } from "../../repositories/results/results-repository";
-import { ResultsStore } from "./service";
+import { Result, ResultsStore } from "./service";
 import { defaultResult } from "./hooks";
+import { decode, encode } from "./compression";
 
 const extractResultPart = (path: string) => {
   return path.split("/").at(-1);

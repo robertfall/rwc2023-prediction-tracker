@@ -1,11 +1,10 @@
 import { Fixture } from "../data/fixtures";
-import { ResultsRepository } from "../repositories/results/results-repository";
 import { useGroupStageFixtures } from "../services/fixtures/hooks";
 import { FixtureSummary } from "./FixtureSummary";
+import { GroupLog } from "./GroupLog";
 import "./GroupStageFixtures.css";
 
 export type GroupStageFixturesProps = {
-  resultsRepository: ResultsRepository;
   fixtures: Fixture[];
 };
 export function GroupStageFixtures() {
@@ -15,15 +14,7 @@ export function GroupStageFixtures() {
       {groupStageFixtures.map((fixture) => (
         <div className="fixture-row" key={fixture.matchNumber}>
           <FixtureSummary {...fixture} />
-          <div className="log">
-            <table>
-              <thead>
-                <tr>
-                  <th>{fixture.group}</th>
-                </tr>
-              </thead>
-            </table>
-          </div>
+          <GroupLog fixture={fixture} />
         </div>
       ))}
     </div>

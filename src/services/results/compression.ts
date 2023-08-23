@@ -1,5 +1,5 @@
 import { MatchNumber } from "../../data/fixtures";
-import { Result } from "./results-repository";
+import { Result } from "./service";
 
 function touchedBitsToBytes(touchedBits: number[]) {
   let cursor = 0;

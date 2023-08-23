@@ -1,9 +1,30 @@
 import { StoreApi, UseBoundStore, create } from "zustand";
 import { produce } from "immer";
 import { MatchNumber } from "../../data/fixtures";
-import { Result } from "../../repositories/results/results-repository";
 import { persist } from "zustand/middleware";
 import { urlParamsStorage } from "./storage";
+
+export type ResultData = PristineResultData | TouchedResultData;
+export type PristineResultData = {
+  touched: false;
+}
+export type TouchedResultData = {
+  touched: true;
+  homeScore: number;
+  awayScore: number;
+  homeTries: number;
+  awayTries: number;
+}
+
+export type PristineResult = {
+  matchNumber: MatchNumber;
+} & PristineResultData;
+
+export type TouchedResult = {
+  matchNumber: MatchNumber;
+} & TouchedResultData;
+
+export type Result = PristineResult | TouchedResult;
 
 export type ResultsStore = {
   results: Partial<Record<MatchNumber, Result>>;

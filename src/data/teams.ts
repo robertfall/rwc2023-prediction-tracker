@@ -1,4 +1,5 @@
 import countryData from "./countries";
+import { GroupTeam } from "./fixtures";
 
 export type GroupName = keyof typeof groups;
 export const poolA = [

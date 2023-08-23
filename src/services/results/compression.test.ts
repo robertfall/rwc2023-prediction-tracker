@@ -2,11 +2,7 @@ import { describe, it, expect } from "vitest";
 import fc from "fast-check";
 import { encode, decode } from "./compression";
 import { MatchNumber } from "../../data/fixtures";
-import {
-  PristineResultData,
-  Result,
-  TouchedResultData,
-} from "./results-repository";
+import { TouchedResultData, PristineResultData, Result } from "./service";
 
 const touchedResultArbitrary = fc.record<TouchedResultData>({
   homeScore: fc.integer({ min: 0, max: 127 }),

@@ -1,6 +1,6 @@
 import { TeamName, GroupName } from "./teams";
 
-export type MatchNumber =
+export type GroupMatchNumber =
   | 1
   | 2
   | 3
@@ -40,30 +40,34 @@ export type MatchNumber =
   | 37
   | 38
   | 39
-  | 40
-  | 41
-  | 42
-  | 43
-  | 44
-  | 45
-  | 46
-  | 47
-  | 48;
-export type PoolTeam = { pool: GroupName; position: number };
+  | 40;
+export type KnockoutMatchNumber = 41 | 42 | 43 | 44 | 45 | 46 | 47 | 48;
+export type MatchNumber = GroupMatchNumber | KnockoutMatchNumber;
+export type GroupTeam = { pool: GroupName; position: number };
 export type MatchOutcome = "winner" | "loser";
 export type MatchTeam = { matchNumber: number; team: MatchOutcome };
-export type FixtureTeam = TeamName | PoolTeam | MatchTeam;
+export type FixtureTeam = TeamName | GroupTeam | MatchTeam;
 
-export type Fixture = {
-  matchNumber: MatchNumber;
-  roundNumber: number;
+export type GroupFixture = {
+  matchNumber: GroupMatchNumber;
+  roundNumber: 1 | 2 | 3 | 4 | 5;
   dateUtc: string;
   location: string;
-  homeTeam: FixtureTeam;
-  awayTeam: FixtureTeam;
-  group?: GroupName;
+  homeTeam: TeamName;
+  awayTeam: TeamName;
+  group: GroupName;
 };
 
+export type KnockoutFixture = {
+  matchNumber: KnockoutMatchNumber;
+  roundNumber: 6 | 7 | 8 | 9;
+  dateUtc: string;
+  location: string;
+  homeTeam: GroupTeam | MatchTeam;
+  awayTeam: GroupTeam | MatchTeam;
+};
+
+export type Fixture = GroupFixture | KnockoutFixture;
 export type fixturesByMatch = Record<MatchNumber, Fixture>;
 
 export function groupByMatchNumber(
@@ -77,7 +81,7 @@ export function groupByMatchNumber(
   }, {});
 }
 
-export const fixtures: readonly Fixture[] = [
+export const groupFixtures: readonly GroupFixture[] = [
   {
     matchNumber: 1,
     roundNumber: 1,
@@ -438,6 +442,9 @@ export const fixtures: readonly Fixture[] = [
     awayTeam: "Portugal",
     group: "C",
   },
+] as const;
+
+export const knockoutFixtures: readonly KnockoutFixture[] = [
   {
     matchNumber: 41,
     roundNumber: 6,
@@ -503,3 +510,5 @@ export const fixtures: readonly Fixture[] = [
     awayTeam: { matchNumber: 46, team: "winner" },
   },
 ] as const;
+
+export const fixtures = [...groupFixtures, ...knockoutFixtures] as const;
