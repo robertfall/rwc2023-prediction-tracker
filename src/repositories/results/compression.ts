@@ -1,13 +1,69 @@
 import { MatchNumber } from "../../data/fixtures";
 import { Result } from "./results-repository";
 
+function touchedBitsToBytes(touchedBits: number[]) {
+  let cursor = 0;
+  let step = 0;
+  let currentByte = 0;
+  let packedBits: number[] = [];
+
+  while (cursor < touchedBits.length) {
+    step = cursor % 8;
+
+    if (step === 0 && cursor !== 0) {
+      packedBits.push(currentByte);
+      currentByte = 0;
+    }
+
+    currentByte += touchedBits[cursor] << step;
+    cursor++;
+  }
+  packedBits.push(currentByte);
+
+  return packedBits;
+}
+
+function touchedBytesToBits(total: number, touchedBytes: Uint8Array) {
+  const totalRows = touchedBytes.length;
+
+  let touchedBits: number[] = [];
+  let row = 0;
+
+  while (row < totalRows) {
+    const lastRow = row === totalRows - 1;
+
+    // Most rows have 8 bits
+    let bitsInRow = 8;
+
+    // The last row might have 8 bits or less
+    if (lastRow && total % 8 !== 0) {
+      bitsInRow = total % 8;
+    }
+
+    const currentRow = touchedBytes[row];
+    let item = 0;
+
+    while (item < bitsInRow) {
+      touchedBits.push((currentRow & Math.pow(2, item)) >> item);
+      item++;
+    }
+
+    row++;
+  }
+  return touchedBits;
+}
+
 function resultsToPackedUint8Array(results: Result[]) {
-  const rawNumbers = results.flatMap((result) => result.touched ? [
-    result.homeScore,
-    result.awayScore,
-    // Pack tries into 4 bits each as they can't be more than 16
-    (result.homeTries << 4) + result.awayTries,
-  ] : []);
+  const rawNumbers = results.flatMap((result) =>
+    result.touched
+      ? [
+          result.homeScore,
+          result.awayScore,
+          // Pack tries into 4 bits each as they can't be more than 16
+          (result.homeTries << 4) + result.awayTries,
+        ]
+      : []
+  );
 
   const resultCount = results.length;
 
@@ -15,7 +71,45 @@ function resultsToPackedUint8Array(results: Result[]) {
     result.touched ? 1 : 0
   );
 
-  return new Uint8Array([resultCount, ...touchedBits, ...rawNumbers]);
+  const packedBits = touchedBitsToBytes(touchedBits);
+
+  return new Uint8Array([resultCount, ...packedBits, ...rawNumbers]);
+}
+
+function packedUint8ArrayToResults(
+  resultCount: number,
+  touchedBits: number[],
+  resultValues: Uint8Array
+) {
+  let results: Result[] = [];
+  let matchIndex = 1;
+  let cursor = 0;
+
+  while (matchIndex <= resultCount) {
+    const matchNumber = matchIndex++ as MatchNumber;
+
+    if (touchedBits[matchNumber - 1]) {
+      const homeScore = resultValues[cursor++];
+      const awayScore = resultValues[cursor++];
+      const homeTries = resultValues[cursor] >> 4;
+      const awayTries = resultValues[cursor++] & 0b1111;
+
+      results.push({
+        touched: true,
+        matchNumber,
+        homeScore,
+        awayScore,
+        homeTries,
+        awayTries,
+      });
+    } else {
+      results.push({
+        touched: false,
+        matchNumber,
+      });
+    }
+  }
+  return results;
 }
 
 function binaryToString(buffer: Uint8Array) {
@@ -40,32 +134,30 @@ export function encode(results: Result[]) {
   return binaryToString(packed);
 }
 
+const BYTES_USED_FOR_COUNT = 1;
+
+function getTotalCount(typedArray: Uint8Array) {
+  return typedArray
+    .slice(0, BYTES_USED_FOR_COUNT)
+    .reduce((acc, i) => acc + i, 0);
+}
+
 export function decode(encoded: string) {
   const typedArray = stringToBinary(encoded);
 
-  const resultCount = typedArray[0];
-  const touchedBits = typedArray.slice(1, 1 + resultCount);
-  const resultValues = typedArray.slice(resultCount + 1);
+  const resultCount = getTotalCount(typedArray);
 
-  let results: Result[] = [];
-  let matchIndex = 1;
+  const touchedBytesCount = Math.floor(resultCount / 8);
+  const touchedBits = touchedBytesToBits(
+    resultCount,
+    typedArray.slice(
+      BYTES_USED_FOR_COUNT,
+      touchedBytesCount + BYTES_USED_FOR_COUNT
+    )
+  );
 
-  for (let index = 0; index < resultValues.length; index++) {
-    const matchNumber = matchIndex++ as MatchNumber;
-    const homeScore = resultValues[index++];
-    const awayScore = resultValues[index++];
-    const homeTries = resultValues[index] >> 4;
-    const awayTries = resultValues[index] & 0b1111;
-
-    results.push({
-      touched: Boolean(touchedBits[matchNumber - 1]),
-      matchNumber,
-      homeScore,
-      awayScore,
-      homeTries,
-      awayTries,
-    });
-  }
-
-  return results;
+  const resultValues = typedArray.slice(
+    BYTES_USED_FOR_COUNT + touchedBytesCount
+  );
+  return packedUint8ArrayToResults(resultCount, touchedBits, resultValues);
 }

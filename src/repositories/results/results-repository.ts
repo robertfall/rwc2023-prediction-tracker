@@ -12,9 +12,15 @@ export type TouchedResultData = {
   awayTries: number;
 }
 
-export type Result = {
+export type PristineResult = {
   matchNumber: MatchNumber;
-} & ResultData;
+} & PristineResultData;
+
+export type TouchedResult = {
+  matchNumber: MatchNumber;
+} & TouchedResultData;
+
+export type Result = PristineResult | TouchedResult;
 
 export type ResultsRepository = {
   getAllResults: () => Promise<Result[]>;

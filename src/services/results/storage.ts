@@ -5,10 +5,15 @@ import { Result } from "../../repositories/results/results-repository";
 import { ResultsStore } from "./service";
 import { defaultResult } from "./hooks";
 
+const extractResultPart = (path: string) => {
+  return path.split("/").at(-1);
+}
+
+
 export const urlParamsStorage: PersistStorage<ResultsStore> = {
-  getItem: (key: string): StorageValue<ResultsStore> => {
-    const searchParams = new URLSearchParams(location.search);
-    const encodedValue = searchParams.get(key);
+  getItem: (): StorageValue<ResultsStore> => {
+    const encodedValue = extractResultPart(location.pathname);
+
     const rawResults = encodedValue
       ? decode(encodedValue)
       : fixtures.map((fixture) => defaultResult(fixture.matchNumber));
@@ -26,15 +31,12 @@ export const urlParamsStorage: PersistStorage<ResultsStore> = {
       version: 0,
     } as StorageValue<ResultsStore>;
   },
-  setItem: (key, results): void => {
-    const searchParams = new URLSearchParams(location.search);
-    results.state.results;
-    searchParams.set(key, encode(Object.values(results.state.results)));
-    window.history.pushState(null, "", `?${searchParams.toString()}`);
+  setItem: (_, results): void => {
+    window.history.pushState(null, "", encode(Object.values(results.state.results)));
   },
   removeItem: (key): void => {
     const searchParams = new URLSearchParams(location.search);
     searchParams.delete(key);
-    window.history.pushState(null, "", `?${searchParams.toString()}`);
+    window.history.pushState(null, "", "");
   },
 };
