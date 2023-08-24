@@ -2,6 +2,7 @@ import { ChangeEvent, useCallback } from "react";
 import { MatchNumber } from "../data/fixtures";
 import { useResult } from "../services/logs/hooks";
 import "./PointsResult.css";
+import { TouchedResult } from "../services/results/service";
 export function PointsResult({
   matchNumber,
 }: {
@@ -23,7 +24,7 @@ export function PointsResult({
     [updateResult]
   );
 
-  const { homeScore, homeTries, awayScore, awayTries } = result;
+  const { homeScore, homeTries, awayScore, awayTries } = result as TouchedResult;
 
   return (
     <div className="points-result">
